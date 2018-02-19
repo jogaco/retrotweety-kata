@@ -18,7 +18,6 @@ public class WriteOwnPosts extends Command {
 
     @Override
     protected void executeCommand(String command, TweetContext context) {
-        //write own posts
         Optional.ofNullable(context.getDomainUser(command)).ifPresent(
                 u -> u.getDomainMessages().stream()
                         .map(DomainMessage::toString)

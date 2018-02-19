@@ -1,30 +1,22 @@
 package io.alfrheim;
 
-import java.time.ZonedDateTime;
-
 public class DomainMessage {
 
     private final DomainUser domainUser;
     private final String message;
-    private final ZonedDateTime created;
-    private final Clock clock;
+    private final Clock created;
+
 
 
     public DomainMessage(DomainUser domainUser, String message, Clock clock) {
-        this(domainUser, message, clock, clock.getTime());
-
-    }
-
-    public DomainMessage(DomainUser domainUser, String message, Clock clock, ZonedDateTime created) {
         this.domainUser = domainUser;
         this.message = message;
-        this.clock = clock;
-        this.created = created;
+        this.created = clock;
     }
 
     @Override
     public String toString() {
-        String formattedTime = clock.elapsedTime(this.created);
+        String formattedTime = created.elapsedTimeFormatted();
         return String.format("%s - %s %s", this.getDomainUser().getName(), this.getMessage(), formattedTime);
     }
 
@@ -37,7 +29,7 @@ public class DomainMessage {
         return domainUser;
     }
 
-    public ZonedDateTime getCreated() {
+    public Clock getCreated() {
         return created;
     }
 }

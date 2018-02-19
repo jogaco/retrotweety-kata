@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class WriteWall extends Command {
     private static final Comparator<DomainMessage> POSTS_DESC =
-            (m1, m2) -> m2.getCreated().compareTo(m1.getCreated());
+            (m1, m2) -> m1.getCreated().elapsedTime().compareTo(m2.getCreated().elapsedTime());
     public static final String COMMAND_NAME = "wall";
 
     @Override
@@ -34,6 +34,11 @@ public class WriteWall extends Command {
                 u -> u.stream()
                         .map(DomainMessage::toString)
                         .forEach(context.getConsole()::printLine));
+    }
+
+    protected String getUserName(String command) {
+        String[] split = command.split(" ");
+        return split[0].trim();
     }
 
     @Override

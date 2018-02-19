@@ -14,14 +14,14 @@ public class Retrotweety implements TweetContext {
 
     private final Console console;
 
-    private final Clock clock;
+    private final ClockFactory clockFactory;
     private final SavePost commands;
 
     private Map<String, DomainUser> users = new HashMap<>();
 
-    public Retrotweety(Console console, Clock clock) {
+    public Retrotweety(Console console, ClockFactory clockFactory) {
         this.console = console;
-        this.clock = clock;
+        this.clockFactory = clockFactory;
         this.commands = new SavePost();
         this.commands.setNext(new WriteWall()).setNext(new Follows()).setNext(new WriteOwnPosts());
 
@@ -44,7 +44,7 @@ public class Retrotweety implements TweetContext {
     }
 
     public Clock getClock() {
-        return clock;
+        return clockFactory.startClock();
     }
 
     @Override

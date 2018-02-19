@@ -6,7 +6,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.time.ZonedDateTime;
+import java.time.Duration;
 
 import static org.mockito.Mockito.*;
 
@@ -18,12 +18,14 @@ public class RetrotweetyShould {
 
     @Test
     public void print_the_superman_message() throws Exception {
-        Clock clock = new Clock();
-        Clock mockClock = spy(clock);
+        ClockFactory clock = new ClockFactory();
+        ClockFactory mockClock = spy(clock);
 
-        ZonedDateTime now = ZonedDateTime.now();
+        Clock clock1SecondElapsed = spy(new Clock());
+        when(clock1SecondElapsed.elapsedTime()).thenReturn(Duration.ofSeconds(1));
 
-        when(mockClock.getTime()).thenReturn(now, now.plusSeconds(1));
+        when(mockClock.startClock()).thenReturn(clock1SecondElapsed);
+
         Retrotweety retrotweety = new Retrotweety(console, mockClock);
 
         retrotweety.command("Superman -> Hello! I'm superawseome!");
@@ -35,12 +37,16 @@ public class RetrotweetyShould {
 
     @Test
     public void print_the_followers_message_on_the_wall() throws Exception {
-        Clock clock = new Clock();
-        Clock mockClock = spy(clock);
+        ClockFactory clock = new ClockFactory();
+        ClockFactory mockClock = spy(clock);
 
-        ZonedDateTime now = ZonedDateTime.now();
-        ZonedDateTime after = now.plusSeconds(2);
-        when(mockClock.getTime()).thenReturn(now, after);
+        Clock clock0SecondElapsed = spy(new Clock());
+        when(clock0SecondElapsed.elapsedTime()).thenReturn(Duration.ofSeconds(0));
+
+        Clock clock2SecondElapsed = spy(new Clock());
+        when(clock2SecondElapsed.elapsedTime()).thenReturn(Duration.ofSeconds(2));
+
+        when(mockClock.startClock()).thenReturn(clock2SecondElapsed, clock0SecondElapsed);
 
         Retrotweety retrotweety = new Retrotweety(console, mockClock);
 
